@@ -1,0 +1,193 @@
+---
+title: "fy_evaluation_md"
+author: "us"
+date: "September 15, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read in data
+
+
+```{r}
+# Load libraries for reading in csv file
+
+
+#install.packages('janitor')
+rm(list = ls())
+
+library(readr)
+library(tibble)
+
+library(dplyr)
+library(tidyr)
+library(janitor)
+
+
+# Load dataset
+# Check how to rename consistently and not manually!
+fy_df = read_delim("./data_raw/fy_eval.csv", delim = ",")
+
+#data = tibble::rowid_to_column(fy_df, "ID")
+
+## Problem: Many columns have the same names! Need to change. Tidyr?
+#fy_df2 = gather(fy_df, key = "ID")
+
+
+
+
+
+
+
+
+
+
+
+```
+`
+```{r}
+# How to work with these long question names?
+
+
+# make varnames nicer with janitor library: Have underscores instead of tabs
+# 
+
+fy_df = fy_df %>% 
+  clean_names()
+
+# Check if this worked:
+fy_df$i_learned_a_lot_this_year
+# Yes, can access the question. 
+
+# Want to get a grasp of my dataframe: 328 questions with long names
+# Make a list of all the questions to get an overview
+
+glimpse(fy_df)
+
+# This is not so nice, though. 
+
+# This will display all questions to scroll through.
+options(fy_df.width = Inf)
+fy_df
+
+
+# Print a list of varnames. Try a loop
+
+for (question in range(1,80, 1)){
+  print(fy_df[[question]])
+}
+# This prints the answers, not the variable names.
+
+
+# This prints the first element
+fy_df[1,1]
+
+
+# This prints all the 328 variable names
+names(fy_df)
+
+# How to access specific variable by number instead of question name?
+
+names(fy_df[327])
+
+
+
+```
+
+```{r}
+# Need to find a good way to deal with the structure of the questionnaire:
+# Separate out the general block from field-specific blocks. 
+
+names(fy_df)
+
+# First block:
+#[1]: Timestamp
+
+# General: 2-33
+# General 1: General
+# General 2: Cohort Atmosphere
+# General 3: Core courses, general organization
+
+# 2 : Macro Fall 34-38, Zili: 59 - 66, Winter, Hemous, TAs; Carlo:
+# 3 : Micro Fall
+# 4: Metrics Fall
+# 5: Macro Spring
+# 6: Micro Spring
+# 7: Metrics Spring. 
+
+# Subsections for all of these: Material covered, Problemsets, Class dynamics, Exam, 
+# General course feedback, Professors, TAs
+
+```
+
+
+
+
+
+
+
+
+```{r}
+# Drop first two columns
+
+fy_df_clean = fy_df_clean %>% 
+
+
+# This is a date, want to add this to my df
+
+
+fy_df2 =  fy_df %>% 
+  mutate(date = as.Date(fy_df$Timestamp))
+  
+fy_df2$date
+
+
+fy_df2 %>% 
+  select(date, everything())
+
+
+# Drop all rows with dates before 2017-08-01
+
+fy_df2 %>% 
+  filter()
+
+
+
+# Erase data columns that were test runs in July before sending out survey.
+# Survey send out date: 
+
+# Check Timestamp
+
+fy_df$Timestamp
+typeof(fy_df$Timestamp)
+
+# Convert into date. Want it in the firts position.
+date = as.Date(fy_df$Timestamp)
+date
+
+```
+
+`````{r}
+# Need to restructure my data, otherwise this is a mess
+# Reshape? Then have data by row. But not tidyr. So no. 
+
+
+# make varnames nicer
+install.packages('janitor')
+library(janitor)
+
+fy_df_clean = fy_df2 %>% 
+  clean_names()
+
+# Drop first two columns
+
+fy_df_clean = fy_df_clean %>% 
+  
+
+fy_df_clean$i_learned_a_lot_this_year
+
+`
+
