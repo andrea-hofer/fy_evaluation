@@ -1,0 +1,67 @@
+---
+title: "pdf_output"
+author: "Andrea Hofer"
+date: "9/19/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE, message = FALSE, echo = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.pos = 'h')
+```
+
+
+
+```{r message = FALSE, echo = FALSE, warning = FALSE}
+# This file creates histograms for all the questions in the data set
+rm(list = ls())
+```
+
+```{r message = FALSE, echo = FALSE, warning = FALSE}
+# Load libraries
+library(lettercase)
+library(ggplot2)
+library(tibble)
+library(readr)
+
+library(dplyr)
+library(tidyr)
+library(janitor)
+```
+
+
+```{r message = FALSE, echo = FALSE, warning = FALSE}
+# Load the data set
+fy_df = read.table("./data_raw/fy_eval.csv", header = TRUE, sep = ",", check.names = FALSE, na.strings = c(""," ","NA"), stringsAsFactors = FALSE)
+
+# Replace special characters 
+ 
+```
+
+
+
+```{r message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+# Loop over all variables to create a pdf with histograms and text output
+
+# Note: if want to print them out separately, create an empty list before and save the plots in this list (for more
+# information see: https://stackoverflow.com/questions/26034177/r-saving-multiple-ggplots-using-a-for-loop)
+for (i in 2:7) {
+  if (is.integer(fy_df[[i]])) {
+    cat("## Statement: ", paste0(names(fy_df)[i]), "  \n")
+    histogram = ggplot(data = fy_df) +
+      geom_bar(mapping = aes(x = fy_df[[i]])) +
+      labs(x = "Possible answers ranging from 1 to 5",
+           y = "Count") +
+      scale_x_continuous(breaks = c(1, 2, 3, 4, 5), limits = c(0.5,5.5)) +
+      theme_bw()
+    print(histogram)  
+    cat("  \n")
+  } else {
+    cat("  \n###", paste0(names(fy_df)[i]), "  \n")
+    print(fy_df[[i]])
+    cat("  \n")
+  }
+}
+```
+
+
+
