@@ -33,7 +33,35 @@ library(janitor)
 # Load the data set
 fy_df = read.table("./data_raw/fy_eval.csv", header = TRUE, sep = ",", check.names = FALSE, na.strings = c(""," ","NA"), stringsAsFactors = FALSE)
 
+
+
 # Replace special characters 
+
+# Replace weird characters that cannot be printed out by print
+
+fy_df = data.frame(lapply(fy_df, gsub, pattern = "\n\n", replacement = " "), check.names = FALSE,  stringsAsFactors = FALSE)
+fy_df = data.frame(lapply(fy_df, gsub, pattern = "%", replacement = " "), check.names = FALSE,  stringsAsFactors = FALSE)
+
+## Now all the columns are strings and I need to convert the number ones back to integers:
+# I will loop through all columns and check whether there is at least one letter, if there is not, it will be  
+# converted to string
+# This is done by checking for each cell whether there is a letter and if there is TRUE is added to the vector locigal for this cell
+# Once we went through all the cells of one column, the vector logic is added up and if there was at least one letter, there will be at least one TRUE which will make the sum greater equal to 1
+# So if the sum is zero, meaning there were no letters in this column, the column is made integer
+logic = c()
+sum = c()
+for (i in 2:328) {
+  for (j in 1:15) {
+    logic[j] = grepl('[a-zA-Z]+', fy_df[[j,i]])
+  }
+  sum[i] = sum(logic)
+  if (sum[i] > 0) {
+    fy_df[[i]] = as.character(fy_df[[i]])
+  } else {
+    fy_df[[i]] = as.integer(as.character(fy_df[[i]]))
+  }
+}
+
  
 ```
 
@@ -44,7 +72,7 @@ fy_df = read.table("./data_raw/fy_eval.csv", header = TRUE, sep = ",", check.nam
 
 # Note: if want to print them out separately, create an empty list before and save the plots in this list (for more
 # information see: https://stackoverflow.com/questions/26034177/r-saving-multiple-ggplots-using-a-for-loop)
-for (i in 2:7) {
+for (i in 2:20) {
   if (is.integer(fy_df[[i]])) {
     cat("## Statement: ", paste0(names(fy_df)[i]), "  \n")
     histogram = ggplot(data = fy_df) +
@@ -57,10 +85,15 @@ for (i in 2:7) {
     cat("  \n")
   } else {
     cat("  \n###", paste0(names(fy_df)[i]), "  \n")
-    print(fy_df[[i]])
-    cat("  \n")
+    for (j in 1:15) {
+      if (!is.na(fy_df[[j,i]])) {
+        cat(" * ", paste(fy_df[[j,i]]), "  \n")
+      }
+    }
   }
+  cat("  \n")
 }
+
 ```
 
 
