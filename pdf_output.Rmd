@@ -1,8 +1,13 @@
 ---
-title: "pdf_output"
+title: "Results of survey on first-year Phd courses"
 author: "Andrea Hofer"
 date: "9/19/2017"
-output: pdf_document
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 1
+    fig_width: 5.5
+    fig_height: 4
 ---
 
 ```{r setup, include=FALSE, message = FALSE, echo = FALSE, warning = FALSE}
@@ -22,7 +27,7 @@ library(lettercase)
 library(ggplot2)
 library(tibble)
 library(readr)
-
+library(knitr)
 library(dplyr)
 library(tidyr)
 library(janitor)
@@ -34,66 +39,103 @@ library(janitor)
 fy_df = read.table("./data_raw/fy_eval.csv", header = TRUE, sep = ",", check.names = FALSE, na.strings = c(""," ","NA"), stringsAsFactors = FALSE)
 
 
+```
 
-# Replace special characters 
-
-# Replace weird characters that cannot be printed out by print
-
-fy_df = data.frame(lapply(fy_df, gsub, pattern = "\n\n", replacement = " "), check.names = FALSE,  stringsAsFactors = FALSE)
-fy_df = data.frame(lapply(fy_df, gsub, pattern = "%", replacement = " "), check.names = FALSE,  stringsAsFactors = FALSE)
-
-## Now all the columns are strings and I need to convert the number ones back to integers:
-# I will loop through all columns and check whether there is at least one letter, if there is not, it will be  
-# converted to string
-# This is done by checking for each cell whether there is a letter and if there is TRUE is added to the vector locigal for this cell
-# Once we went through all the cells of one column, the vector logic is added up and if there was at least one letter, there will be at least one TRUE which will make the sum greater equal to 1
-# So if the sum is zero, meaning there were no letters in this column, the column is made integer
-logic = c()
-sum = c()
-for (i in 2:328) {
-  for (j in 1:15) {
-    logic[j] = grepl('[a-zA-Z]+', fy_df[[j,i]])
-  }
-  sum[i] = sum(logic)
-  if (sum[i] > 0) {
-    fy_df[[i]] = as.character(fy_df[[i]])
-  } else {
-    fy_df[[i]] = as.integer(as.character(fy_df[[i]]))
-  }
-}
-
- 
+```{r message = FALSE, echo = FALSE}
+# Clean up data:
+read_chunk('clean_data.R')
+```
+```{r replace_linebreak, echo = FALSE}
+```
+```{r replace_percentage, echo = FALSE}
+```
+```{r replace_text, echo = FALSE}
+```
+```{r fix_column_names, echo = FALSE}
+```
+```{r correct_column_type, echo = FALSE}
 ```
 
 
+```{r echo = FALSE, message = FALSE}
+# Function that creates histograms and prints out strings:
 
-```{r message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
-# Loop over all variables to create a pdf with histograms and text output
-
-# Note: if want to print them out separately, create an empty list before and save the plots in this list (for more
-# information see: https://stackoverflow.com/questions/26034177/r-saving-multiple-ggplots-using-a-for-loop)
-for (i in 2:20) {
-  if (is.integer(fy_df[[i]])) {
-    cat("## Statement: ", paste0(names(fy_df)[i]), "  \n")
-    histogram = ggplot(data = fy_df) +
-      geom_bar(mapping = aes(x = fy_df[[i]])) +
-      labs(x = "Possible answers ranging from 1 to 5",
-           y = "Count") +
-      scale_x_continuous(breaks = c(1, 2, 3, 4, 5), limits = c(0.5,5.5)) +
-      theme_bw()
-    print(histogram)  
-    cat("  \n")
-  } else {
-    cat("  \n###", paste0(names(fy_df)[i]), "  \n")
-    for (j in 1:15) {
-      if (!is.na(fy_df[[j,i]])) {
-        cat(" * ", paste(fy_df[[j,i]]), "  \n")
+create_plot <- function(beginning,end, print = TRUE) {
+  for (i in beginning:end) {
+    if (is.integer(fy_df[[i]])) {                             # if column is int, create histogram
+      if (grepl('%+', names(fy_df)[i])) {                     # if column has % sign, change labels of histogram
+       cat("##Statement: ", paste0(names(fy_df)[i]), "  \n")  # print out column name
+       histogram = ggplot(data = fy_df) +                     # create histogram
+         geom_bar(mapping = aes(x = fy_df[[i]])) +
+         labs(x = "Possible answers ranging from 0-25% to 75-100%",
+              y = "Count") +
+         scale_x_continuous(breaks = c(1, 2, 3, 4), labels = c("0-25%", "25-50%", "50-75%", "75-100%"), limits =                 c(0.5,4.5)) +
+         theme_bw()
+        print(histogram)
+       cat("  \n")
+      } else {                                               # if no % sign, have different graph labels
+        cat("##Statement: ", paste0(names(fy_df)[i]), "  \n")
+        histogram = ggplot(data = fy_df) +
+         geom_bar(mapping = aes(x = fy_df[[i]])) +
+         labs(x = "Possible answers ranging from 1 (stongly disagree) to 5 (strongly agree)",
+              y = "Count") +
+         scale_x_continuous(breaks = c(1, 2, 3, 4, 5), limits = c(0.5,5.5)) +
+         theme_bw()
+       print(histogram)  
+       cat("  \n")
+      }
+    } else {                                                 # if column not integer, print out text in string 
+     cat("  \n###", paste0(names(fy_df)[i]), "  \n")         # print out column name
+      for (j in 1:15) {
+        if (!is.na(fy_df[[j,i]])) {
+          cat(" * ", paste(fy_df[[j,i]]), "  \n")
+        }
       }
     }
+    cat("  \n")
   }
-  cat("  \n")
 }
+```
 
+# General Assessment of the first year courses 2016/2017 
+```{r message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(2,33)
+```
+\pagebreak
+
+#Assessment of the course Macroeconomics for Research Students in Fall 2016 
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(34,94)
+```
+ \pagebreak
+ 
+#Assessment of the course Microeconomics for Research Students in Fall 2016 
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(95,139)
+```
+\pagebreak
+
+#Assessment of the course Econometrics for Research Students in Fall 2016 
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(140,178)
+```
+\pagebreak
+
+#Assessment of the course Macroeconomics for Research Students in Spring 2017 
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(179,240)
+```
+\pagebreak
+
+#Assessment of the course Microeconomics for Research Students in Spring 2017 
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(241,280)
+```
+\pagebreak
+
+#Assessment of the course Econometrics for Research Students in Spring 2017 
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(281,328)
 ```
 
 
