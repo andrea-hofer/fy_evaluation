@@ -19,6 +19,10 @@ knitr::opts_chunk$set(echo = TRUE, fig.pos = 'h')
 ```{r message = FALSE, echo = FALSE, warning = FALSE}
 # This file creates histograms for all the questions in the data set
 rm(list = ls())
+# Set output directory
+
+owd = setwd('output')
+getwd()
 ```
 
 ```{r message = FALSE, echo = FALSE, warning = FALSE}
@@ -36,7 +40,7 @@ library(tidyr)
 
 ```{r message = FALSE, echo = FALSE, warning = FALSE}
 # Load the data set
-fy_df = read.table("./data_raw/fy_eval.csv", header = TRUE, sep = ",", check.names = FALSE, na.strings = c(""," ","NA"), stringsAsFactors = FALSE)
+fy_df = read.table("./input/First Year evaluation.csv", header = TRUE, sep = ",", check.names = FALSE, na.strings = c(""," ","NA"), stringsAsFactors = FALSE)
 
 
 ```
