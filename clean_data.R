@@ -5,7 +5,7 @@ library(readr)
 
 library(dplyr)
 library(tidyr)
-library(janitor)
+#library(janitor)
 
 ## Replace special characters: 
 # 1. Replace \n as it cannot be printed out by print

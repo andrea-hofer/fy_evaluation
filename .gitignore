@@ -2,3 +2,4 @@
 ghostdriver.log
 .Rhistory
 *.csv*
+data_raw
