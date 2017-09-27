@@ -22,11 +22,11 @@ library(tidyr)
 
 ### Python 3 (libraries are called in the python script)
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import time
-from selenium.webdriver.chrome.options import Options
-import os
+from selenium import webdriver  
+from selenium.webdriver.common.keys import Keys  
+import time  
+from selenium.webdriver.chrome.options import Options  
+import os  
 
 ## Order of files
 
