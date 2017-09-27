@@ -12,13 +12,13 @@ and written answers for all questions.
 ## Libraries needed
 
 ### Rstudio
-library(lettercase)
-library(ggplot2)
-library(tibble)
-library(readr)
-library(knitr)
-library(dplyr)
-library(tidyr)
+library(lettercase)  
+library(ggplot2)  
+library(tibble)  
+library(readr)  
+library(knitr)  
+library(dplyr)  
+library(tidyr)  
 
 ### Python 3
 
