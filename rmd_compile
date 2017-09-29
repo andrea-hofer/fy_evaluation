@@ -1,0 +1,13 @@
+
+#snakefile for creating rmd document.
+
+## run_rmd:  knits the Rmd file into HTML
+rule run_rmd:
+    input:
+        runner   = "knit_rmd2pdf.R",
+        rmd_file = "pdf_output.Rmd",
+        #data       = "path_to_data\\dataset.csv"
+    output:
+        pdf_file = "output\\pdf_output.pdf"
+    shell:
+        "Rscript {input.runner} {input.rmd_file} ../{output.html_file}
