@@ -1,4 +1,4 @@
----
+getwd---
 title: "Results of the student survey on first-year Phd courses"
 author: "Andrea Hofer, Ursina Schaede, Matteo Roberto Greco"
 date: "9/27/2017"
