@@ -9,6 +9,10 @@ through a dynamic scraper.
 An Rmd script analyzes the data and provides a PDF that contains statistics
 and written answers for all questions.
 
+## Note: Scraper runs on windows! Necessary adjustments if running elsewhere, see
+under fixes below!
+
+
 ## Libraries needed
 
 ### Rstudio
@@ -26,9 +30,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys  
 import time  
 from selenium.webdriver.chrome.options import Options  
-import os
-import sys
-import zip
+import os  
+import sys  
+import zip  
 
 ## Order of files
 
@@ -45,7 +49,11 @@ The files should be run in the following order:
 Note that the directories created in the script are made for Windows and
 therefore use double slashes \\. If you run this on a different operating system,
 please change accordingly.   
-Relevant lines are in the python script:
+Relevant lines are:  
+  input_path = path + '\\input'  
+  output_path = path + '\\output'  
+  chromedriver = application_path + '\\chromedriver'  
+  stored_path = input_path + "\\First_Year_evaluation.csv.zip"  
 
 
 2) Google Authentication:  
