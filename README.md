@@ -9,7 +9,8 @@ through a dynamic scraper.
 An Rmd script analyzes the data and provides a PDF that contains statistics
 and written answers for all questions.
 
-## Note: Scraper runs on windows! Necessary adjustments if running elsewhere, see
+## Note:   
+Scraper runs on windows! Necessary adjustments if running elsewhere, see
 under fixes below!
 
 
