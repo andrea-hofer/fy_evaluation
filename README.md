@@ -46,14 +46,16 @@ The files should be run in the following order:
 ## Potential problems and fixes:
 
 ### Scraper:
+0) Set chromedriver path according to local machine and change:  
+chromedriver = 'C:/webdrivers/chromedriver'
+
 1) Directories:  
 Note that the directories created in the script are made for Windows and
-therefore use double slashes \\\. If you run this on a different operating system,
+therefore use double slashes \"\\" . If you run this on a different operating system,
 please change accordingly.   
-Relevant lines are:  
+Relevant lines are:    
   input_path = path + '\\\input'  
   output_path = path + '\\\output'  
-  chromedriver = application_path + '\\\chromedriver'  
   stored_path = input_path + "\\\First_Year_evaluation.csv.zip"  
 
 
