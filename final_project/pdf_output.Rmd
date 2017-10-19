@@ -1,0 +1,142 @@
+---
+title: "Results of the student survey on first-year Phd courses"
+author: "Andrea Hofer, Ursina Schaede, Matteo Roberto Greco"
+date: "9/27/2017"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 1
+    fig_width: 5.5
+    fig_height: 4
+---
+
+```{r setup, include=FALSE, message = FALSE, echo = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.pos = 'h')
+```
+
+
+
+```{r message = FALSE, echo = FALSE, warning = FALSE}
+# This file creates histograms for all the questions in the data set
+rm(list = ls())
+
+```
+
+```{r message = FALSE, echo = FALSE, warning = FALSE}
+# Load libraries
+library(lettercase)
+library(ggplot2)
+library(tibble)
+library(readr)
+library(knitr)
+library(dplyr)
+library(tidyr)
+#library(janitor)
+```
+
+
+```{r message = FALSE, echo = FALSE, warning = FALSE}
+# Load the data set
+fy_df = read.table("./input/First_year_evaluation.csv", header = TRUE, sep = ",", check.names = FALSE, na.strings = c(""," ","NA"), stringsAsFactors = FALSE)
+
+
+```
+
+```{r message = FALSE, echo = FALSE}
+# Clean up data:
+read_chunk('clean_data.R')
+```
+```{r drop_testrun, echo = FALSE}
+```
+```{r replace_linebreak, echo = FALSE}
+```
+```{r replace_percentage, echo = FALSE}
+```
+```{r replace_text, echo = FALSE}
+```
+```{r fix_column_names, echo = FALSE}
+```
+```{r correct_column_type, echo = FALSE}
+```
+
+
+```{r echo = FALSE, message = FALSE}
+# Function that creates histograms and prints out strings:
+
+create_plot <- function(beginning,end, print = TRUE) {
+  for (i in beginning:end) {
+    if (is.integer(fy_df[[i]])) {                             # if column is int, create histogram
+      if (grepl('%+', names(fy_df)[i])) {                     # if column has % sign, change labels of histogram
+       cat("##Statement: ", paste0(names(fy_df)[i]), "  \n")  # print out column name
+       histogram = ggplot(data = fy_df) +                     # create histogram
+         geom_bar(mapping = aes(x = fy_df[[i]])) +
+         labs(x = "Possible answers ranging from 0-25% to 75-100%",
+              y = "Count") +
+         scale_x_continuous(breaks = c(1, 2, 3, 4), labels = c("0-25%", "25-50%", "50-75%", "75-100%"), limits =                 c(0.5,4.5)) +
+         theme_bw()
+        print(histogram)
+       cat("  \n")
+      } else {                                               # if no % sign, have different graph labels
+        cat("##Statement: ", paste0(names(fy_df)[i]), "  \n")
+        histogram = ggplot(data = fy_df) +
+         geom_bar(mapping = aes(x = fy_df[[i]])) +
+         labs(x = "Possible answers ranging from 1 (stongly disagree) to 5 (strongly agree)",
+              y = "Count") +
+         scale_x_continuous(breaks = c(1, 2, 3, 4, 5), limits = c(0.5,5.5)) +
+         theme_bw()
+       print(histogram)  
+       cat("  \n")
+      }
+    } else {                                                 # if column not integer, print out text in string
+     cat("  \n###", paste0(names(fy_df)[i]), "  \n")         # print out column name
+      for (j in 1:13) {
+        if (!is.na(fy_df[[j,i]])) {
+          cat(" * ", paste(fy_df[[j,i]]), "  \n")
+        }
+      }
+    }
+    cat("  \n")
+  }
+}
+```
+
+# General Assessment of the first year courses 2016/2017
+```{r message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(2,33)
+```
+\pagebreak
+
+#Assessment of the course Macroeconomics for Research Students in Fall 2016
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(34,94)
+```
+ \pagebreak
+
+#Assessment of the course Microeconomics for Research Students in Fall 2016
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(95,139)
+```
+\pagebreak
+
+#Assessment of the course Econometrics for Research Students in Fall 2016
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(140,178)
+```
+\pagebreak
+
+#Assessment of the course Macroeconomics for Research Students in Spring 2017
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(179,240)
+```
+\pagebreak
+
+#Assessment of the course Microeconomics for Research Students in Spring 2017
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(241,280)
+```
+\pagebreak
+
+#Assessment of the course Econometrics for Research Students in Spring 2017
+```{r, message = FALSE, echo = FALSE, warning = FALSE, results = "asis"}
+create_plot(281,328)
+```
